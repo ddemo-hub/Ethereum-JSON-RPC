@@ -20,6 +20,10 @@ class BaseTask(ABC):
         cached_data = Globals.block_data_cache.copy()
         return cached_data
 
+    def free_cache():
+        Globals.use_cache = False
+        Globals.block_data_cache = None
+        
 
     @abstractmethod
     def run(self):
