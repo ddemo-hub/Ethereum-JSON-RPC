@@ -3,6 +3,8 @@ from .base_task import BaseTask
 import pandas
 import pandasql
 
+pandas.options.mode.chained_assignment = None   # Disable SettingWithCopyWarning
+
 class Task2(BaseTask):
     def __init__(self, config_service, data_service):
         super().__init__(config_service, data_service)
@@ -89,7 +91,7 @@ class Task2(BaseTask):
 
         df_transactions = self.get_transactions_df(df_block_data)
         
-        gas_prices = df_transactions[["transactionIndex", "gasPrice"]]
+        gas_prices = df_transactions[["blockNumber", "transactionIndex", "gasPrice"]]
         gas_prices["gasPrice"] = gas_prices["gasPrice"].apply(lambda x: int(x, base=16))
         
         gas_prices["zscore"] = (gas_prices["gasPrice"] - gas_prices["gasPrice"].mean()) / gas_prices["gasPrice"].std(ddof=0)

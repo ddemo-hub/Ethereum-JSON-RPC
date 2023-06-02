@@ -29,6 +29,8 @@ def main(tasks: TaskContainer):
     
     scheduler = BlockingScheduler()
     scheduler.add_job(Task2.anomaly_detector, args=[tasks.task2], trigger="cron", hour="*")
+    
+    tasks.task2.anomaly_detector()  # run it once before scheduling
     scheduler.start()
 
 if __name__ == "__main__":
