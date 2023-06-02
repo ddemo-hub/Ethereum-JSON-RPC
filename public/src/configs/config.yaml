@@ -6,5 +6,6 @@ block_range:
   txn_details: True
 
 limit_per_second: 5 
+sleep_on_error: 10 
 
-anomaly_threshold: 4  # Set at 4 since the likelihood of an entry being further away than 4 standard deviations from the mean is theoretically 0
+anomaly_threshold: 4  # Set at 4 since the likelihood of an entry being further away more than 4 standard deviations from the mean is theoretically 0

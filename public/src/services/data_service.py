@@ -48,8 +48,8 @@ class DataService(metaclass=Singleton):
             try:
                 list_block_data += asyncio.run(self._pool(chunk))
             except Exception as ex:
-                logger.error(f"Error while requesting the chunk {chunk}\n{ex}")
-                time.sleep(5)   # Sleep for some time and try again
+                logger.error(f"Error while requesting the chunk {chunk}\n{ex}\nTrying again in {self.config_service.sleep_on_error} seconds")
+                time.sleep(self.config_service.sleep_on_error)   # Sleep for some time and try again
                 list_block_data += asyncio.run(self._pool(chunk))
                 
             time.sleep(1)   # After requesting a chunk, sleep for 1 second to avoid exceeding the rate limit per second

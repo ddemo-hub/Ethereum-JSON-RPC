@@ -13,12 +13,11 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 def run_tasks(tasks: TaskContainer):
     logger.info("[TASK 1] Starts")
-    #tasks.task1.run()
+    tasks.task1.run()
     logger.info("[TASK 1] Ends")
     
     logger.info("[TASK 2] Starts")
-    #tasks.task2.run()
-    tasks.task2.anomaly_detector()
+    tasks.task2.run()
     logger.info("[TASK 2] Ends")
     
     logger.info("[TASK 3] Starts")

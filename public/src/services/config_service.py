@@ -37,5 +37,9 @@ class ConfigService(metaclass=Singleton):
         return self.config["config"]["limit_per_second"]
     
     @property
+    def sleep_on_error(self):
+        return self.config["config"]["sleep_on_error"]    
+    
+    @property
     def anomaly_threshold(self):
         return self.config["config"]["anomaly_threshold"]
