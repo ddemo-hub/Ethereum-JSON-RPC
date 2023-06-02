@@ -12,4 +12,6 @@ clean:
 	rm -rf public/src/utils/__pycache__
 	rm -rf public/tasks/__pycache__
 	rm -rf public/__pycache__
+	
+	rm -rf artifacts
 	rm -rf .venv

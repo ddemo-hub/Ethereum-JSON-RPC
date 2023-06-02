@@ -15,3 +15,23 @@ class ConfigService(metaclass=Singleton):
             
             with open(config_path, "r") as cf:
                 self.config[config_name] = yaml.safe_load(cf)
+
+    @property
+    def json_rpc_endpoint(self):
+        return self.config["config"]["JSON_RPC_endpoint"]
+    
+    @property
+    def start_block(self):
+        return self.config["config"]["block_range"]["start"]
+    
+    @property
+    def end_block(self):
+        return self.config["config"]["block_range"]["end"]
+    
+    @property
+    def txn_details(self):
+        return self.config["config"]["block_range"]["txn_details"]
+    
+    @property
+    def limit_per_second(self):
+        return self.config["config"]["limit_per_second"]

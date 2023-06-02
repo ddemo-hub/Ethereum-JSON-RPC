@@ -11,4 +11,4 @@ class Globals(metaclass=Singleton):
     # Paths
     project_path = pathlib.Path(__file__).parent.parent.parent
     
-    artifacts_path = f"{project_path.parent}/artifacts/{DATETIME_NOW}"
+    artifacts_path = project_path.parent.joinpath("artifacts", DATETIME_NOW)

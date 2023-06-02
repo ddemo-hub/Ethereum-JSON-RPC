@@ -1,0 +1,8 @@
+JSON_RPC_endpoint: https://rpc.ankr.com/eth
+
+block_range: 
+  start: 17000000
+  end: 17000009  
+  txn_details: True
+
+limit_per_second: 5 
