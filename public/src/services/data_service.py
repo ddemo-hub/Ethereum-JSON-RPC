@@ -8,6 +8,10 @@ import aiohttp
 import pandas
 import time
 
+import os
+if os.name == "nt": # If running on Windows:
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())     # Windows has a problem with the EventLoopPolicy, using this line to bypass it
+
 class DataService(metaclass=Singleton):
     def __init__(self, config_service: ConfigService):
         self.config_service = config_service
@@ -47,6 +51,7 @@ class DataService(metaclass=Singleton):
         for chunk in chunks:
             try:
                 list_block_data += asyncio.run(self._pool(chunk))
+                logger.info(f"Collecting data => {int(len(list_block_data) / (self.config_service.end_block - self.config_service.start_block) * 100)}%")
             except Exception as ex:
                 logger.error(f"Error while requesting the chunk {chunk}\n{ex}\nTrying again in {self.config_service.sleep_on_error} seconds")
                 time.sleep(self.config_service.sleep_on_error)   # Sleep for some time and try again

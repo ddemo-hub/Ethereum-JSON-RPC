@@ -5,7 +5,7 @@ block_range:
   end: 17005000  
   txn_details: True
 
-limit_per_second: 50
+limit_per_second: 100
 sleep_on_error: 10 
 
 anomaly_threshold: 4  # Set at 4 since the likelihood of an entry being further away more than 4 standard deviations from the mean is theoretically 0

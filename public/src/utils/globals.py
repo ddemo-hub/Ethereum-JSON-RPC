@@ -5,7 +5,7 @@ import pathlib
 import pandas
 
 class Globals(metaclass=Singleton):
-    DATETIME_NOW = datetime.now().strftime("%Y_%B/Day_%d/%H:%M:%S")
+    DATETIME_NOW = datetime.now().strftime("%Y_%B/Day_%d/%H.%M.%S")
     
     # Paths
     project_path = pathlib.Path(__file__).parent.parent.parent

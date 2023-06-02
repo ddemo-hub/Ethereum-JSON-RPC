@@ -35,7 +35,7 @@ class Task2(BaseTask):
         df_hex_to_dec = df_hex_to_dec.apply(lambda row: pandas.Series([int(r, base=16) for r in row]), axis=1)        
         
         df_transactions[hex_to_dec_cols] = df_hex_to_dec
-        df_transactions["value"] = df_transactions["value"] / 10                # In order to avoid integer overflow
+        df_transactions["value"] = df_transactions["value"].astype(float)       # In order to avoid integer overflow
     
         # Top 10 Ethereum addresses by the total Ether received
         query1 = f"""
@@ -49,7 +49,7 @@ class Task2(BaseTask):
         """
         top_receivers = pandasql.sqldf(query1, locals())
         
-        self.logger.info(f"[TASK 2] Top 10 Ethereum addresses that received the most Ether can be listed as:\n{top_receivers}")
+        self.logger.info(f"\n[TASK 2] Top 10 Ethereum addresses that received the most Ether can be listed as:\n{top_receivers}")
         
         # Top 5 Smart Contracts by the total number of transactions
         query2 = f"""
@@ -77,12 +77,12 @@ class Task2(BaseTask):
         )
         SELECT sender_nonce.contract
         FROM sender_nonce JOIN sender_count JOIN receiver_count
-        ORDER BY sender_nonce.count + sender_count.count + receiver_count.count DESC
+        ORDER BY (sender_nonce.count + sender_count.count + receiver_count.count) DESC
         LIMIT 5;
         """
         top_transactors = pandasql.sqldf(query2, locals())
         
-        self.logger.info(f"[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_transactors}")
+        self.logger.info(f"\n[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_transactors}")
 
     def anomaly_detector(self):
         df_block_data = self.data_service.get_blocks()        
@@ -96,4 +96,4 @@ class Task2(BaseTask):
         
         anomalies = gas_prices.loc[(gas_prices["zscore"] >= self.config_service.anomaly_threshold) | (gas_prices["zscore"] <= -self.config_service.anomaly_threshold)]
         
-        self.logger.info(f"[TASK 2] Following transactions have anormal gas prices:\n {anomalies}")
+        self.logger.info(f"\n[TASK 2] Following transactions have anormal gas prices:\n {anomalies}")
