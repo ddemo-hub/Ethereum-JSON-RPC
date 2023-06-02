@@ -82,7 +82,7 @@ class Task2(BaseTask):
         """
         top_transactors = pandasql.sqldf(query2, locals())
         
-        logger.info(f"[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_receivers}")
+        logger.info(f"[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_transactors}")
 
     def anomaly_detector(self):
         df_block_data = self.data_service.get_blocks()        
