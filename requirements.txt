@@ -1,4 +1,5 @@
-aiohttp==3.8.4      # Needed for sending asynchronous requests
+aiohttp==3.8.4          # Needed for sending asynchronous requests
+APScheduler==3.10.1     # Used for scheduling the anomaly detector
 pandas==2.0.2
 pandasql==0.7.3
 PyYAML==6.0

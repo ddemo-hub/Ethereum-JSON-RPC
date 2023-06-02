@@ -20,7 +20,7 @@ class Task1(BaseTask):
         total_gasPrice = 0
         num_txn = 0
         for block in df_block_data.itertuples():                    # In this situation, itertuples is faster than other iteration methods including the apply method
-            txn = block.transactions                                 # Plus, itertuples is more readable
+            txn = block.transactions                                # Plus, itertuples is more readable
             list_gasPrices = list(
                 map (
                     lambda x: int(x["gasPrice"], base=16),  # Get the gasPrice and convert it to decimal

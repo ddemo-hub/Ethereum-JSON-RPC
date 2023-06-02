@@ -35,3 +35,7 @@ class ConfigService(metaclass=Singleton):
     @property
     def limit_per_second(self):
         return self.config["config"]["limit_per_second"]
+    
+    @property
+    def anomaly_threshold(self):
+        return self.config["config"]["anomaly_threshold"]
