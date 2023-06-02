@@ -1,8 +1,5 @@
 from .base_task import BaseTask
 
-from src.utils.globals import Globals
-from src.utils import logger
-
 class Task1(BaseTask):
     def __init__(self, config_service, data_service):
         super().__init__(config_service, data_service)
@@ -15,9 +12,9 @@ class Task1(BaseTask):
         self.cache_block_data(df_block_data)    
         
         # Save the data in .json format
-        save_json_path = Globals.artifacts_path.joinpath("block_data.json")
+        save_json_path = self.globals.artifacts_path.joinpath("block_data.json")
         df_block_data.to_json(save_json_path)        
-        logger.info(f"[TASK 1] The block data is saved to '{save_json_path}' in .json format")
+        self.logger.info(f"[TASK 1] The block data is saved to '{save_json_path}' in .json format")
         
         # Calculate the Average Gas Price of the Transactions
         total_gasPrice = 0
@@ -35,7 +32,7 @@ class Task1(BaseTask):
             num_txn += 1
         
         avg_gasPrice = total_gasPrice / num_txn        
-        logger.info(
+        self.logger.info(
             f"[TASK 1] The average gas price of the transactions within the blocks in range " + \
             f"{self.config_service.start_block}-{self.config_service.end_block} is: {avg_gasPrice} Wei"
         )
@@ -52,7 +49,7 @@ class Task1(BaseTask):
             )
             ether_transferred += sum(list_ether_transferred)
 
-        logger.info(
+        self.logger.info(
             f"[TASK 1] The total amount of Ether transferred by the transactions within the blocks " + \
             f"{self.config_service.start_block}-{self.config_service.end_block} is: {ether_transferred} Ether"
         )   

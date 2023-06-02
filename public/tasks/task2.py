@@ -1,8 +1,5 @@
 from .base_task import BaseTask
 
-from src.utils.globals import Globals
-from src.utils import logger
-
 import pandas
 import pandasql
 
@@ -21,7 +18,7 @@ class Task2(BaseTask):
     
     def run(self):
         # Get the data
-        if Globals.use_cache == True:
+        if self.globals.use_cache == True:
             df_block_data = self.read_cached_block()
         else:
             df_block_data = self.data_service.get_blocks()        
@@ -52,7 +49,7 @@ class Task2(BaseTask):
         """
         top_receivers = pandasql.sqldf(query1, locals())
         
-        logger.info(f"[TASK 2] Top 10 Ethereum addresses that received the most Ether can be listed as:\n{top_receivers}")
+        self.logger.info(f"[TASK 2] Top 10 Ethereum addresses that received the most Ether can be listed as:\n{top_receivers}")
         
         # Top 5 Smart Contracts by the total number of transactions
         query2 = f"""
@@ -85,7 +82,7 @@ class Task2(BaseTask):
         """
         top_transactors = pandasql.sqldf(query2, locals())
         
-        logger.info(f"[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_transactors}")
+        self.logger.info(f"[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_transactors}")
 
     def anomaly_detector(self):
         df_block_data = self.data_service.get_blocks()        
@@ -99,4 +96,4 @@ class Task2(BaseTask):
         
         anomalies = gas_prices.loc[(gas_prices["zscore"] >= self.config_service.anomaly_threshold) | (gas_prices["zscore"] <= -self.config_service.anomaly_threshold)]
         
-        logger.info(f"[TASK 2] Following transactions have anormal gas prices:\n {anomalies}")
+        self.logger.info(f"[TASK 2] Following transactions have anormal gas prices:\n {anomalies}")
