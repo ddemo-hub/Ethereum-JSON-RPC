@@ -1,4 +1,5 @@
 from src.utils.singleton import Singleton
+from src.utils import logger
 
 from .config_service import ConfigService
 
@@ -44,8 +45,14 @@ class DataService(metaclass=Singleton):
         
         list_block_data = []
         for chunk in chunks:
-            list_block_data += asyncio.run(self._pool(chunk))
-            time.sleep(1)   # After requesting every chunk, sleep for 1 second to avoid exceeding the rate limit per second
+            try:
+                list_block_data += asyncio.run(self._pool(chunk))
+            except Exception as ex:
+                logger.error(f"Error while requesting the chunk {chunk}\n{ex}")
+                time.sleep(5)   # Sleep for some time and try again
+                list_block_data += asyncio.run(self._pool(chunk))
+                
+            time.sleep(1)   # After requesting a chunk, sleep for 1 second to avoid exceeding the rate limit per second
 
         df_block_data = pandas.DataFrame(list_block_data)
         
