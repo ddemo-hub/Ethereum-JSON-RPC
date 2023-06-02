@@ -9,7 +9,10 @@ class Task1(BaseTask):
                    
     def run(self):
         # Get the data
-        df_block_data = self.data_service.get_blocks()        
+        df_block_data = self.data_service.get_blocks()  
+        
+        # Cache the data
+        self.cache_block_data(df_block_data)    
         
         # Save the data in .json format
         save_json_path = Globals.artifacts_path.joinpath("block_data.json")
