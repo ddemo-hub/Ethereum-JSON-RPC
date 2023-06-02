@@ -1,3 +1,5 @@
+from src.utils.singleton import Singleton
+
 from .config_service import ConfigService
 
 import asyncio
@@ -5,7 +7,7 @@ import aiohttp
 import pandas
 import time
 
-class DataService:
+class DataService(metaclass=Singleton):
     def __init__(self, config_service: ConfigService):
         self.config_service = config_service
         

@@ -1,12 +1,14 @@
+from .singleton import Singleton
+
 from datetime import datetime
 import pathlib
 import os
 
-class Logger:
-    logger_path: str
+class Logger(metaclass=Singleton):
+    def __init__(self):
+        self.logger_path: pathlib.Path
     
-    @classmethod
-    def set_logger_path(cls, path: pathlib.Path) -> None:
+    def set_logger_path(self, path: pathlib.Path) -> None:
         log_time = datetime.now().strftime("%Y/%m/%d %H.%M.%S")
         try:
             with open(path, "w") as log_file:
@@ -19,30 +21,26 @@ class Logger:
                 log_file.write(f"[{log_time}]Logger created at -> {path}\n")
         
         print(f"[{log_time}]Logger created at -> {path}")
-        cls.logger_path = path
+        self.logger_path = path
     
-    @classmethod
-    def info(cls, message):
+    def info(self, message):
         log_time = datetime.now().strftime("%Y/%m/%d %H.%M.%S")
-        with open(cls.logger_path, "a") as log_file:
+        with open(self.logger_path, "a") as log_file:
             log_file.write(f"[{log_time}][INFO] {message}\n")
         print(f"[{log_time}][INFO] {message}")
 
-    @classmethod
-    def warn(cls, message):
+    def warn(self, message):
         log_time = datetime.now().strftime("%Y/%m/%d %H.%M.%S")
-        with open(cls.logger_path, "a") as log_file:
+        with open(self.logger_path, "a") as log_file:
             log_file.write(f"[{log_time}][WARN] {message}\n")    
         print(f"[{log_time}][WARN] {message}")
 
-    @classmethod
-    def error(cls, message):
+    def error(self, message):
         log_time = datetime.now().strftime("%Y/%m/%d %H.%M.%S")
-        with open(cls.logger_path, "a") as log_file:
+        with open(self.logger_path, "a") as log_file:
             log_file.write(f"[{log_time}][ERROR] {message}\n")   
         print(f"[{log_time}][ERROR] {message}")
 
-    @classmethod
-    def print(cls, message):
+    def print(self, message):
         log_time = datetime.now().strftime("%Y/%m/%d %H.%M.%S")
         print(f"[{log_time}] {message}")

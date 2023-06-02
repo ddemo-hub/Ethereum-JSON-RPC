@@ -6,9 +6,6 @@ from src.services.data_service import DataService
 
 from public.tasks import *
 
-from dataclasses import dataclass
-
-@dataclass
 class TaskContainer(metaclass=Singleton):
     config_service = ConfigService(
         configs=Globals.project_path.joinpath("src", "configs")
