@@ -18,8 +18,10 @@ class DataService(metaclass=Singleton):
         
     async def _request_block_data(self, payload, session) -> dict:
         response = await session.request('POST', url=self.config_service.json_rpc_endpoint, json=payload)
+        if response.status != 200:
+            raise Exception(f"payload: {payload}... status Code: {response.status}")
+        
         json_response = await response.json()
-
         return json_response["result"]
         
     async def _pool(self, payloads) -> list:
@@ -30,7 +32,7 @@ class DataService(metaclass=Singleton):
                 for payload in payloads
             ]
                 
-            block_data = await asyncio.gather(*queue, return_exceptions=True)
+            block_data = await asyncio.gather(*queue, return_exceptions=False)
         
         return block_data
 
@@ -56,7 +58,7 @@ class DataService(metaclass=Singleton):
             except Exception as ex:
                 logger.error(f"[DATA SERVICE] Error while requesting the chunk {chunk}\n{ex}\nTrying again in {self.config_service.sleep_on_error} seconds")
                 time.sleep(self.config_service.sleep_on_error)   # Sleep for some time and try again
-                list_block_data += asyncio.run(self._pool(chunk))
+                list_block_data += asyncio.run(self._pool(chunk))   # Program terminates if another exception is raised once again
                 
             time.sleep(1)   # After requesting a chunk, sleep for 1 second to avoid exceeding the rate limit per second
 
