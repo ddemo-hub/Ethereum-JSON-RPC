@@ -17,6 +17,7 @@ class BaseTask(ABC):
         self.logger = logger
 
     def cache_block_data(self, block_data: pandas.DataFrame):
+        # The data is cached for future use to avoid requesting the same data over and over during
         self.globals.block_data_cache = block_data.copy()
         self.globals.use_cache = True
         

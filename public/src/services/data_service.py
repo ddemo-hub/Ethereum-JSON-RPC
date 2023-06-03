@@ -23,6 +23,7 @@ class DataService(metaclass=Singleton):
         return json_response["result"]
         
     async def _pool(self, payloads) -> list:
+        # Asynchronously request the data of each block. More performant than requesting blocks sequentially 
         async with aiohttp.ClientSession() as session:
             queue = [
                 self._request_block_data(payload=payload, session=session)

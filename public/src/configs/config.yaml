@@ -2,10 +2,10 @@ JSON_RPC_endpoint: https://rpc.ankr.com/eth
 
 block_range: 
   start: 17000000
-  end: 17000009  
-  txn_details: True
+  end: 17005000  
+  txn_details: True     # True for transaction details to be included
 
-limit_per_second: 100
+limit_per_second: 100   # Per second limit rate of the provider
 sleep_on_error: 10 
 
 anomaly_threshold: 4  # Set at 4 since the likelihood of an entry being further away more than 4 standard deviations from the mean is theoretically 0

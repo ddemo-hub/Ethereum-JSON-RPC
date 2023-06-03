@@ -18,7 +18,7 @@ def run_tasks(tasks: TaskContainer):
     
     logger.info("[TASK 2] Starts")
     tasks.task2.run()
-    tasks.task2.anomaly_detector()  # run it once before scheduling
+    tasks.task2.anomaly_detector()      # run it once before scheduling
     logger.info("[TASK 2] Ends\n")
     
     logger.info("[TASK 3] Starts")
@@ -29,7 +29,7 @@ def main(tasks: TaskContainer):
     run_tasks(tasks)
     
     scheduler = BlockingScheduler()
-    scheduler.add_job(Task2.anomaly_detector, args=[tasks.task2], trigger="cron", hour="*")
+    scheduler.add_job(Task2.anomaly_detector, args=[tasks.task2], trigger="cron", hour="*")     # Schedule the anomaly detector
     scheduler.start()
 
 if __name__ == "__main__":
