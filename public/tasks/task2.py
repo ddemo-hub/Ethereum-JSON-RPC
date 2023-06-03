@@ -70,7 +70,7 @@ class Task2(BaseTask):
             AND blockNumber BETWEEN {self.config_service.start_block} AND {self.config_service.end_block}
             GROUP BY [to]                        
         )
-        SELECT nonce.contract, (COALESCE(nonce.count,0) + COALESCE(receiver_count.count,0)) as total_transactions       /* COALESCE is needed as the rows can be NULL when an address is only present at columns 'to' or at column 'from' and not both */
+        SELECT nonce.contract, (COALESCE(nonce.count,0) + COALESCE(receiver_count.count,0)) as total_transactions       /* COALESCE is needed since the rows can be NULL if the address is not present in both 'to' and 'from' columns */
         FROM nonce LEFT OUTER JOIN receiver_count on nonce.contract = receiver_count.contract                           /* FULL OUTER JOINS should be used by it is not supported by pandasql */     
         ORDER BY (COALESCE(nonce.count,0) + COALESCE(receiver_count.count,0)) DESC                                      /* Total number of transactions received and sent */  
         LIMIT 5;
