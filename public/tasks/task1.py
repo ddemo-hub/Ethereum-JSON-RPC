@@ -14,7 +14,7 @@ class Task1(BaseTask):
         # Save the data in .json format
         save_json_path = self.globals.artifacts_path.joinpath("block_data.json")
         df_block_data.to_json(save_json_path)        
-        self.logger.info(f"[TASK 1] The block data is saved to '{save_json_path}' in .json format")
+        self.logger.info(f"[TASK 1] The block data is saved to '{save_json_path}' in .json format\n")
         
         # Calculate the Average Gas Price of the Transactions
         total_gasPrice = 0
@@ -34,7 +34,7 @@ class Task1(BaseTask):
         avg_gasPrice = total_gasPrice / num_txn        
         self.logger.info(
             f"[TASK 1] The average gas price of the transactions within the blocks in range " + \
-            f"{self.config_service.start_block}-{self.config_service.end_block} is: {avg_gasPrice} Wei"
+            f"{self.config_service.start_block}-{self.config_service.end_block} is: {avg_gasPrice} Wei\n"
         )
         
         # Calculate the total amount of Ether transferred

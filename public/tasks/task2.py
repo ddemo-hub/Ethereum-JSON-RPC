@@ -41,9 +41,9 @@ class Task2(BaseTask):
     
         # Top 10 Ethereum addresses by the total Ether received
         query1 = f"""
-        SELECT [to]
+        SELECT [to] as address, SUM(value) as ether_received 
         FROM df_transactions
-        WHERE [to] IS NOT NULL 
+        WHERE [to] IS NOT NULL                                     /* Transactions in which 'to' is NULL is eliminated since they are smart contract deployments */
         AND blockNumber BETWEEN {self.config_service.start_block} AND {self.config_service.end_block}
         GROUP BY [to]
         ORDER BY SUM(value) DESC
@@ -51,40 +51,33 @@ class Task2(BaseTask):
         """
         top_receivers = pandasql.sqldf(query1, locals())
         
-        self.logger.info(f"\n[TASK 2] Top 10 Ethereum addresses that received the most Ether can be listed as:\n{top_receivers}")
+        self.logger.info(f"\n[TASK 2] Top 10 Ethereum addresses that received the most Ether can be listed as:\n{top_receivers}\n")
         
         # Top 5 Smart Contracts by the total number of transactions
         query2 = f"""
         WITH 
-        sender_nonce AS (
-            SELECT [from] as contract, SUM(nonce) as count
+        nonce AS (
+            SELECT [from] as contract, MAX(nonce) as count          /* Only the highest nonce count is taken into account as nonce is incremented sequentially */
             FROM df_transactions
             WHERE [to] IS NOT NULL 
             AND blockNumber BETWEEN {self.config_service.start_block} AND {self.config_service.end_block}
             GROUP BY [from]
         ),
-        sender_count AS (
-            SELECT [from] as contract, COUNT(*) as count
-            FROM df_transactions
-            WHERE [to] IS NOT NULL 
-            AND blockNumber BETWEEN {self.config_service.start_block} AND {self.config_service.end_block}
-            GROUP BY [from]            
-        ),
         receiver_count AS (
-            SELECT [to] as contract, COUNT(*) as count
+            SELECT [to] as contract, COUNT(*) as count              /* 'count' is the number of times an address received a transaction */
             FROM df_transactions
             WHERE [to] IS NOT NULL 
             AND blockNumber BETWEEN {self.config_service.start_block} AND {self.config_service.end_block}
-            GROUP BY [from]                        
+            GROUP BY [to]                        
         )
-        SELECT sender_nonce.contract
-        FROM sender_nonce JOIN sender_count JOIN receiver_count
-        ORDER BY (sender_nonce.count + sender_count.count + receiver_count.count) DESC
+        SELECT nonce.contract, (nonce.count + receiver_count.count) as total_transactions
+        FROM nonce JOIN receiver_count     
+        ORDER BY (nonce.count + receiver_count.count) DESC          /* Total number of transactions received and sent */  
         LIMIT 5;
         """
         top_transactors = pandasql.sqldf(query2, locals())
         
-        self.logger.info(f"\n[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_transactors}")
+        self.logger.info(f"\n[TASK 2] Top 5 Smart Contracts by the total number of transactions can be listed as:\n{top_transactors}\n")
 
     def anomaly_detector(self):
         df_block_data = self.data_service.get_blocks()        

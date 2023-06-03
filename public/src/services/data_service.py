@@ -51,9 +51,9 @@ class DataService(metaclass=Singleton):
         for chunk in chunks:
             try:
                 list_block_data += asyncio.run(self._pool(chunk))
-                logger.info(f"Collecting data => {int(len(list_block_data) / (self.config_service.end_block - self.config_service.start_block+1) * 100)}%")
+                logger.info(f"[DATA SERVICE] Collecting data => {int(len(list_block_data) / (self.config_service.end_block - self.config_service.start_block+1) * 100)}%")
             except Exception as ex:
-                logger.error(f"Error while requesting the chunk {chunk}\n{ex}\nTrying again in {self.config_service.sleep_on_error} seconds")
+                logger.error(f"[DATA SERVICE] Error while requesting the chunk {chunk}\n{ex}\nTrying again in {self.config_service.sleep_on_error} seconds")
                 time.sleep(self.config_service.sleep_on_error)   # Sleep for some time and try again
                 list_block_data += asyncio.run(self._pool(chunk))
                 
