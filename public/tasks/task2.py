@@ -20,10 +20,7 @@ class Task2(BaseTask):
     
     def run(self):
         # Get the data
-        if self.globals.use_cache == True:
-            df_block_data = self.read_cached_block()
-        else:
-            df_block_data = self.data_service.get_blocks()        
+        df_block_data = self.read_block_data()  
 
         # Create the transactions table
         df_transactions = self.get_transactions_df(df_block_data)

@@ -62,6 +62,7 @@ class DataService(metaclass=Singleton):
                 
             time.sleep(1)   # After requesting a chunk, sleep for 1 second to avoid exceeding the rate limit per second
 
+        list_block_data = list(filter(lambda x: x is not None, list_block_data)) # remove None values in case of an error
         df_block_data = pandas.DataFrame(list_block_data)
         
         return df_block_data

@@ -16,19 +16,21 @@ class BaseTask(ABC):
         self.globals = Globals
         self.logger = logger
 
-    def cache_block_data(self, block_data: pandas.DataFrame):
-        # The data is cached for future use to avoid requesting the same data over and over during
-        self.globals.block_data_cache = block_data.copy()
-        self.globals.use_cache = True
-        
-    def read_cached_block(self):
-        cached_data = self.globals.block_data_cache.copy()
-        return cached_data
-
     def free_cache(self):
         self.globals.use_cache = False
         self.globals.block_data_cache = None
         
+    def read_block_data(self):
+        if self.globals.use_cache == True:
+            df_block_data = self.globals.block_data_cache.copy()
+        else:
+            df_block_data = self.data_service.get_blocks()        
+            
+            # The data is cached for future use to avoid requesting the same data over and over 
+            self.globals.block_data_cache = df_block_data.copy()
+            self.globals.use_cache = True
+
+        return df_block_data
 
     @abstractmethod
     def run(self):
